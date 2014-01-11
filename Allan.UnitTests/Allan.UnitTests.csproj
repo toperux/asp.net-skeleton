@@ -58,4 +58,15 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+
+  <UsingTask AssemblyFile="..\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
+  <Target Name="RunTest">
+    <xunit Assembly="bin\Debug\Allan.UnitTests.dll" Xml="xunit.Allan.UnitTests.xml"/>
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="RunTest">
+    <XslTransformation XslInputPath="..\packages\xunit.runners.1.9.2\tools\NUnitXML.xslt"
+      XmlInputPaths="xunit.Allan.UnitTests.xml"
+      OutputPaths="nunit.Allan.UnitTests.xml" />
+  </Target>
 </Project>
