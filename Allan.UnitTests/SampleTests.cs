@@ -5,7 +5,7 @@ namespace Allan.UnitTests
     public class SampleTests
     {
         [Fact]
-        public void SomeTest()
+        public void PassingTest()
         {
             Assert.True(true);
         }
