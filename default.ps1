@@ -5,7 +5,7 @@ properties {
 
 Task -name Build -action {
   Exec {
-    msbuild Allan.EntityFramework.sln
+    msbuild Allan.EntityFramework.sln /p:Configuration=Release
   }
 };
 
