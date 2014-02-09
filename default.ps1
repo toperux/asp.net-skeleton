@@ -16,4 +16,18 @@ Task -name UnitTest -depend Build -action {
   }
 }
 
+Task -name IntegrationTest -action {
+  Mkdir Artifacts
+  Exec {
+    msbuild Allan.Web\Allan.Web.csproj /t:PipelineDeployPhase /p:Configuration=Release /p:PublishProfile=Testing /p:ArtifactDir=$cwd\Artifacts
+  }
+  $iis = Start-Job -ScriptBlock { & "c:\Program Files\IIS Express\iisexpress.exe" $args} -ArgumentList "/path:$cwd\Artifacts\"
+  Mkdir TestResults
+  Exec {
+    & $xunitRunner ".\Allan.IntegrationTests\bin\Debug\Allan.IntegrationTests.dll" /nunit TestResults\Allan.IntegrationTests.xml
+  }
+  Stop-Job $iis
+  Receive-Job $iis
+}
+
 Task -name Default -depends Build
