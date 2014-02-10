@@ -12,7 +12,7 @@ Task -name Build -action {
 Task -name UnitTest -depend Build -action {
   Mkdir TestResults
   Exec {
-    & $xunitRunner ".\Allan.UnitTests\bin\Debug\Allan.UnitTests.dll" /nunit TestResults\Allan.UnitTests.xml
+    & $xunitRunner ".\Allan.UnitTests\bin\Debug\Allan.UnitTests.dll" /nunit $cwd\TestResults\Allan.UnitTests.xml
   }
 }
 
@@ -23,9 +23,7 @@ Task -name IntegrationTest -action {
   }
   $iis = Start-Job -ScriptBlock { & "c:\Program Files\IIS Express\iisexpress.exe" $args} -ArgumentList "/path:$cwd\Artifacts\"
   Mkdir TestResults
-  Exec {
-    & $xunitRunner ".\Allan.IntegrationTests\bin\Debug\Allan.IntegrationTests.dll" /nunit TestResults\Allan.IntegrationTests.xml
-  }
+  & $xunitRunner ".\Allan.IntegrationTests\bin\Debug\Allan.IntegrationTests.dll" /nunit $cwd\TestResults\Allan.IntegrationTests.xml
   Stop-Job $iis
   Receive-Job $iis
 }
