@@ -1,0 +1,22 @@
+---
+driver:
+  name: vagrant
+driver_config:
+  require_chef_omnibus: false
+
+provisioner:
+  name: chef_zero
+  sudo: false
+  root_path: c:/Windows/Temp
+
+platforms:
+  - name: windows2012r2
+    driver:
+      box: windows2012r2
+    
+
+suites:
+  - name: default
+    run_list:
+      - recipe[aspnet_skeleton::default]
+    attributes:

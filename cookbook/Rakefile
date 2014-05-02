@@ -1,0 +1,33 @@
+require 'rake/testtask'
+require 'foodcritic'
+require 'fileutils'
+require 'berkshelf'
+
+berksfile = Berkshelf::Berksfile.from_file("Berksfile")
+
+task :build do
+  berksfile.vendor "../packages/cookbooks"
+  unless ENV['CI']
+    FileUtils.rm_rf "../packages/cookbooks/aspnet_skeleton"
+    FileUtils.ln_s "../../cookbook", "../packages/cookbooks/aspnet_skeleton"
+  end
+end
+
+task :clean do
+  FileUtils.rm_rf "../packages/cookbooks"
+end
+
+FoodCritic::Rake::LintTask.new(:lint)
+
+Rake::TestTask.new do |t|
+  t.test_files = FileList['test/*_test.rb']
+end
+
+task :default => :build
+
+begin
+  require 'kitchen/rake_tasks'
+  Kitchen::RakeTasks.new
+rescue LoadError
+  puts ">>>>> Kitchen gem not loaded, omitting tasks" unless ENV['CI']
+end

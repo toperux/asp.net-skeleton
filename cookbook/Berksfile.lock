@@ -1,0 +1,13 @@
+DEPENDENCIES
+  aspnet_skeleton
+    path: .
+    metadata: true
+
+GRAPH
+  aspnet_skeleton (0.1.0)
+    iis (~> 2.1.2)
+  chef_handler (1.1.6)
+  iis (2.1.2)
+    windows (>= 1.2.6)
+  windows (1.31.0)
+    chef_handler (>= 0.0.0)
