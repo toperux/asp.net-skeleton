@@ -30,6 +30,7 @@ tmtags
 .project
 .settings
 mkmf.log
+Gemfile.lock
 
 ## COMPILED ##
 ##############
