@@ -31,22 +31,24 @@ end
 app_pool = iis_pool "skeleton_pool" do
   runtime_version "4.0"
   pipeline_mode :Integrated
-  action [:add, :config, :stop]
+  action [:add, :config]
 end
 
-app_root = directory File.join(node["iis"]["docroot"], "skeleton_app") do
-  recursive true
-  action :create
-end
+deploy_target = File.join(node['iis']['docroot'], 'skeleton_app')
 
 iis_site "skeleton_app" do
-  path app_root.path
+  path File.join(deploy_target, 'current')
   application_pool app_pool.name
   action [:add, :start]
 end
 
-windows_zipfile app_root.path do
-  source "http://192.168.11.4:8000/skeleton.zip"
-  checksum "5ce50ed60c26063925d16e22f08f514735df0db96a383cf338dbaad17477b0b0"
-  notifies :start, "iis_pool[skeleton_pool]"
+artifact_deploy 'skeleton_app' do
+  version '0.1.0'
+  owner 'vagrant'
+  group 'vagrant'
+  artifact_location 'http://192.168.11.10:8000/skeleton.zip'
+  artifact_checksum '5ce50ed60c26063925d16e22f08f514735df0db96a383cf338dbaad17477b0b0'
+  deploy_to deploy_target
+  before_deploy Proc.new { app_pool.action :stop }
+  after_deploy Proc.new { app_pool.action :start }
 end
