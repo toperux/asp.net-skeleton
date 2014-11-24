@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "Xunit.KRunner": "1.0.0-*",
+    "Allan.Web": ""
+  },
+  "commands": {
+    "test": "Xunit.KRunner"
+  },
+  "frameworks": {
+    "aspnet50": {}
+  }
+}
